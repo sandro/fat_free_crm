@@ -48,14 +48,20 @@ Spec::Runner.configure do |config|
     end
   end
 
+  config.before(:suite) do
+    unless @before_suite_done
+      require 'rake'
+      load 'Rakefile'
+      Rake::Task['crm:settings:load'].invoke
+      @before_suite_done = true
+    end
+  end
+
   #
   # == Notes
   #
   # For more information take a look at Spec::Runner::Configuration and Spec::Runner
 end
-
-# Load default settings from config/settings.yml
-Factory(:default_settings)
 
 # See vendor/plugins/authlogic/lib/authlogic/test_case.rb
 #----------------------------------------------------------------------------
